@@ -1,6 +1,7 @@
 package com.example.bookmarkerapi.domain;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,8 @@ public class BookmarkService {
     public BookmarksDTO getBookmarks(Integer page) {
         int pageNo = page < 1 ? 0 : (page - 1);
         PageRequest pageRequest = PageRequest.of(pageNo, 10, Sort.Direction.DESC, "createdAt");
-        return new BookmarksDTO(bookmarkRepository.findAll(pageRequest));
+        Page<Bookmark> bookmarkPage = bookmarkRepository.findAll(pageRequest);
+        return new BookmarksDTO(bookmarkPage);
     }
 
 }
