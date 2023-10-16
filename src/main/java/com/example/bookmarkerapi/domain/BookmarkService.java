@@ -15,12 +15,13 @@ import java.util.List;
 public class BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
+    private final BookmarkMapper bookmarkMapper;
 
     @Transactional(readOnly = true)
     public BookmarksDTO getBookmarks(Integer page) {
         int pageNo = page < 1 ? 0 : (page - 1);
         PageRequest pageRequest = PageRequest.of(pageNo, 10, Sort.Direction.DESC, "createdAt");
-        Page<Bookmark> bookmarkPage = bookmarkRepository.findAll(pageRequest);
+        Page<BookmarkDTO> bookmarkPage = bookmarkRepository.findAll(pageRequest).map(bookmarkMapper::toDTO);
         return new BookmarksDTO(bookmarkPage);
     }
 
